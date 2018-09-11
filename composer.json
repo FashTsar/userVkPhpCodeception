@@ -1,0 +1,6 @@
+{
+    "name": "codeception/vk-poster",
+    "require": {
+        "codeception/codeception": "^2.4"
+    }
+}
