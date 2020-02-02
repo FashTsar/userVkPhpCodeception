@@ -13,8 +13,12 @@ $I->authorizationVK($loginVK, $passwordVK);
 $I->amOnUrl("https://vk.com/feed");
 $I->wait(rand(3, 5));
 
-$I->moveMouseOver("//div[@id='feed_rows']/div[1]//a[@class='like_btn like _like']");
+$I->moveMouseOver("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
 $I->wait(rand(3, 5));
-$I->click("//div[@id='feed_rows']/div[1]//a[@class='like_btn like _like']");
+$I->click("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
 $I->wait(rand(3, 5));
-echo "\nПоставили лайк на новость";
+$I->click("//div[@class='like_share_radio']/div[1]");
+$I->wait(rand(3, 5));
+$I->click("Поделиться записью");
+$I->wait(rand(3, 5));
+echo "\nСделали репост из ленты новостей";

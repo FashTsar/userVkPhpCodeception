@@ -1454,10 +1454,11 @@ class AcceptanceTester extends \Codeception\Actor
             $this->amOnUrl("https://vk.com/feed");
             $this->wait(rand(3, 5));
 
-            $randNews = rand(1, 7);
-            $this->moveMouseOver("//div[@id='feed_rows']/div[$randNews]//a[@class='like_btn share _share empty']");
+            $this->moveMouseOver("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
             $this->wait(rand(3, 5));
-            $this->click("//div[@id='feed_rows']/div[$randNews]//a[@class='like_btn share _share empty']");
+            $this->click("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
+            $this->wait(rand(3, 5));
+            $this->click("//div[@class='like_share_radio']/div[1]");
             $this->wait(rand(3, 5));
             $this->click("Поделиться записью");
             $this->wait(rand(3, 5));
