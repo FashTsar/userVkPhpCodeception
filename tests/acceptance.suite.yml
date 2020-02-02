@@ -17,6 +17,7 @@ modules:
     WebDriver:
       url: 'http://acceptanceTest/'
       browser: 'chrome'
+      window_size: 1349x600
 
 # Настройки для использования ChromeDriver (БЕЗ Selenium)
 #modules:

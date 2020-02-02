@@ -3,12 +3,15 @@ namespace Codeception\PHPUnit\ResultPrinter;
 
 use Codeception\Event\FailEvent;
 use Codeception\Events;
+use Codeception\PHPUnit\DispatcherWrapper;
 use Codeception\Test\Unit;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class UI extends \PHPUnit\TextUI\ResultPrinter
 {
+    use DispatcherWrapper;
+
     /**
      * @var EventDispatcher
      */
@@ -23,7 +26,8 @@ class UI extends \PHPUnit\TextUI\ResultPrinter
     protected function printDefect(\PHPUnit\Framework\TestFailure $defect, int $count): void
     {
         $this->write("\n---------\n");
-        $this->dispatcher->dispatch(
+        $this->dispatch(
+            $this->dispatcher,
             Events::TEST_FAIL_PRINT,
             new FailEvent($defect->failedTest(), null, $defect->thrownException(), $count)
         );
@@ -89,6 +93,11 @@ class UI extends \PHPUnit\TextUI\ResultPrinter
     }
 
     public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time) : void
+    {
+        $this->lastTestFailed = true;
+    }
+
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time) : void
     {
         $this->lastTestFailed = true;
     }
