@@ -1281,7 +1281,7 @@ class AcceptanceTester extends \Codeception\Actor
             // выкладываем в ВК
             $this->amOnUrl("https://vk.com/");
             $this->wait(rand(3, 5));
-            $this->click("Группы");
+            $this->click("//li[@id='l_gr']");
             $this->wait(rand(3, 5));
             $this->fillField("//input[@id='groups_list_search']", $word);
             $this->wait(rand(3, 5));
