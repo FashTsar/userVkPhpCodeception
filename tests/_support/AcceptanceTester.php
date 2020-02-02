@@ -1430,10 +1430,9 @@ class AcceptanceTester extends \Codeception\Actor
             $this->amOnUrl("https://vk.com/feed");
             $this->wait(rand(3, 5));
 
-            $randNews = rand(1, 7);
-            $this->moveMouseOver("//div[@id='feed_rows']/div[$randNews]//a[@class='like_btn like _like']");
+            $this->moveMouseOver("//div[@id='feed_rows']/div[1]//a[@class='like_btn like _like']");
             $this->wait(rand(3, 5));
-            $this->click("//div[@id='feed_rows']/div[$randNews]//a[@class='like_btn like _like']");
+            $this->click("//div[@id='feed_rows']/div[1]//a[@class='like_btn like _like']");
             $this->wait(rand(3, 5));
             echo "\nПоставили лайк на новость";
         } catch (Exception $e) {
