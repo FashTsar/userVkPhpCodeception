@@ -1496,7 +1496,7 @@ class AcceptanceTester extends \Codeception\Actor
             $randAudio = rand(1, 7);
             $this->moveMouseOver("//div[@class='clear_fix _audio_pl audio_recoms_audios_block audio_w_covers']/div[$randAudio]");
             $this->wait(rand(3,5));
-            $this->click("//div[@class='clear_fix _audio_pl audio_recoms_audios_block audio_w_covers']/div[$randAudio]//button[@class='audio_row__action audio_row__action_add _audio_row__action_add']");
+            $this->click("//div[@class='clear_fix _audio_pl audio_recoms_audios_block audio_w_covers']/div[$randAudio]//button[@aria-label='Добавить в мою музыку']");
             $this->wait(rand(3,5));
             echo "\nДобавили песню в свою музыку";
         } catch (Exception $e) {

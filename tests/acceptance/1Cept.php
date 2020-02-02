@@ -9,16 +9,24 @@ $passwordVK = "oCQS3So";
 // переходим на страницу ВК и авторизуемся
 $I->authorizationVK($loginVK, $passwordVK);
 
-// ставим лайк на новость
-$I->amOnUrl("https://vk.com/feed");
-$I->wait(rand(3, 5));
+// собираем слово
+$I->amOnUrl("http://free-generator.ru/words.html");
+$I->wait(rand(3,5));
+$word = $I->grabMultiple("//div[@id='result']");
+$word = $word[0];
 
-$I->moveMouseOver("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
-$I->wait(rand(3, 5));
-$I->click("//div[@id='feed_rows']/div[1]//a[@class='like_btn share _share empty']");
-$I->wait(rand(3, 5));
-$I->click("//div[@class='like_share_radio']/div[1]");
-$I->wait(rand(3, 5));
-$I->click("Поделиться записью");
-$I->wait(rand(3, 5));
-echo "\nСделали репост из ленты новостей";
+// добавляем песню
+$I->amOnUrl("https://vk.com/");
+$I->wait(rand(3,5));
+$I->click("Музыка");
+$I->wait(rand(3,5));
+$I->fillField("//input[@id='audio_search']", $word);
+$I->wait(rand(3,5));
+$I->pressKey("//input[@id='audio_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
+$I->wait(rand(3,5));
+$randAudio = rand(1, 7);
+$I->moveMouseOver("//div[@class='clear_fix _audio_pl audio_recoms_audios_block audio_w_covers']/div[$randAudio]");
+$I->wait(rand(3,5));
+$I->click("//div[@class='clear_fix _audio_pl audio_recoms_audios_block audio_w_covers']/div[$randAudio]//button[@aria-label='Добавить в мою музыку']");
+$I->wait(rand(3,5));
+echo "\nДобавили песню в свою музыку";
