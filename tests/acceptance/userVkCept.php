@@ -5,7 +5,6 @@ $I = new AcceptanceTester($scenario);
 // принимаемые параметры
 $loginVK = "";
 $passwordVK = "";
-$numberIterations = 1000000;
 $runCheckFriendRequests = true;
 $runAddNewsMyPageVk = true;
 $runAddNewsPageNewsVk = true;
@@ -20,14 +19,16 @@ $runAddGroup = true;
 $runAddFineFriend = true;
 $runAddOfferFriend = true;
 
-// чистим логи перед запуском
-file_put_contents('tests/log/log', '');
-
 // переходим на страницу ВК и авторизуемся
 $I->authorizationVK($loginVK, $passwordVK);
 
+// номер оборота
+$time = 0;
+
 // запускаем цикл
-for ($man = 1; $man <= $numberIterations; $man++) {
+while (true) {
+    $time++;
+    echo "\nОборот номер $time";
 
     if ($runCheckFriendRequests === true) {
         // проверяем заявки в друзья
@@ -108,4 +109,7 @@ for ($man = 1; $man <= $numberIterations; $man++) {
             $I->addOfferFriend();
         }
     }
+    $randWait = rand(149, 211);
+    echo "\nЖдём $randWait секунд";
+    $I->wait($randWait);
 }
