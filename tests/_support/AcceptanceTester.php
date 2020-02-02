@@ -157,7 +157,7 @@ class AcceptanceTester extends \Codeception\Actor
             $this->wait(rand(3,5));
             $random = rand(1, 8);
             if($random === 1) {
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм добавлен в новости со своей страницы";
             }
@@ -180,7 +180,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с видео добавлен в новости со своей страницы";
             }
@@ -201,7 +201,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней добавлен в новости со своей страницы";
             }
@@ -226,7 +226,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото добавлен в новости со своей страницы";
             }
@@ -265,7 +265,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней и видео добавлен в новости со своей страницы";
             }
@@ -308,7 +308,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и видео добавлен в новости со своей страницы";
             }
@@ -349,7 +349,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и песней добавлен в новости со своей страницы";
             }
@@ -408,7 +408,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото, видео и песней добавлен в новости со своей страницы";
             }
@@ -446,7 +446,7 @@ class AcceptanceTester extends \Codeception\Actor
             $this->wait(rand(3,5));
             $random = rand(1, 8);
             if($random === 1) {
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм добавлен в новости";
             }
@@ -469,7 +469,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с видео добавлен в новости";
             }
@@ -490,7 +490,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней добавлен в новости";
             }
@@ -515,7 +515,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото добавлен в новости";
             }
@@ -554,7 +554,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней и видео добавлен в новости";
             }
@@ -597,7 +597,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и видео добавлен в новости";
             }
@@ -638,7 +638,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и песней добавлен в новости";
             }
@@ -697,7 +697,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото, видео и песней добавлен в новости";
             }
@@ -749,7 +749,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео добавлено в новости со своей страницы";
             }
@@ -770,7 +770,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня добавлена в новости со своей страницы";
             }
@@ -795,7 +795,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото добавлено в новости со своей страницы";
             }
@@ -834,7 +834,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео и песня добавлены в новости со своей страницы";
             }
@@ -877,7 +877,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео и фото добавлены в новости со своей страницы";
             }
@@ -918,7 +918,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня и фото добавлены в новости со своей страницы";
             }
@@ -977,7 +977,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня, видео и фото добавлены в новости со своей страницы";
             }
@@ -1025,7 +1025,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео добавлено в новости";
             }
@@ -1046,7 +1046,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня добавлена в новости";
             }
@@ -1071,7 +1071,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото добавлено в новости";
             }
@@ -1110,7 +1110,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня и видео добавлены в новости";
             }
@@ -1153,7 +1153,7 @@ class AcceptanceTester extends \Codeception\Actor
                 };
                 $this->click("Прикрепить");
                 $this->wait(rand(3,5));
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото и видео добавлены в новости";
             }
@@ -1194,7 +1194,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото и песня добавлены в новости";
             }
@@ -1253,7 +1253,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->wait(rand(3,5));
                     } catch (Exception $e){}
                 };
-                $this->click("Отправить");
+                $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото, видео и песня добавлены в новости";
             }

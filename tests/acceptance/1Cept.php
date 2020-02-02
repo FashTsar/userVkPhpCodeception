@@ -31,6 +31,6 @@ $I->wait(rand(3,5));
 $I->fillField("//div[@id='post_field']", $afor);
 $I->wait(rand(3,5));
 
-$I->click("Отправить");
+$I->click("Опубликовать");
 $I->wait(rand(3,5));
 echo "\nАфоризм добавлен в новости со своей страницы";
