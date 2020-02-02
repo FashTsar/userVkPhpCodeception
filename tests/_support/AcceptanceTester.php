@@ -15,14 +15,14 @@
  * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
-   /**
-    * ---======= ДЕЙСТВИЯ ДО ЗАПУСКА ЦИКЛА =======---
-    */
+    /**
+     * ---======= ДЕЙСТВИЯ ДО ЗАПУСКА ЦИКЛА =======---
+     */
 
     /**
      * Авторизуемся в ВК
@@ -31,11 +31,15 @@ class AcceptanceTester extends \Codeception\Actor
     function authorizationVK($loginVk, $passwordVk) {
         // переходим на страницу ВК и авторизуемся
         $this->amOnUrl("https://vk.com/login");
+        $this->waitForElementVisible("//input[@id='email']", 60);
+        $this->wait(3);
         $this->fillField("//input[@id='email']", $loginVk);
+        $this->wait(1);
         $this->fillField("//input[@id='pass']", $passwordVk);
+        $this->wait(1);
         $this->click("//button[@id='login_button']");
         try {
-            $this->waitForText("Моя Страница");
+            $this->waitForText("Моя страница", 60);
             echo "\nАвторизация прошла успешно";
         } catch (Exception $e) {
             echo "\nОшибка: Авторизация не прошла";
@@ -103,8 +107,12 @@ class AcceptanceTester extends \Codeception\Actor
             $this->click("Моя страница");
             $this->wait(rand(3,5));
             try{
+                $this->moveMouseOver("//div[@id='page_info_wrap']", 1, 1);
+                $this->wait(1);
                 $this->click("//span[@class='no_current_info']");
             } catch (Exception $e) {
+                $this->moveMouseOver("//div[@id='page_info_wrap']", 1, 1);
+                $this->wait(1);
                 $this->click("//div[@id='currinfo_wrap']//span[@class='current_text']");
             }
             $this->wait(rand(3,5));
