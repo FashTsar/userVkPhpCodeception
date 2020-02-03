@@ -62,12 +62,7 @@ class AcceptanceTester extends \Codeception\Actor
     function checkFriendRequests() {
         try {
             // проверяем есть ли заявки в друзья
-            $this->amOnUrl("https://vk.com/");
-            $this->wait(rand(3,5));
-            $this->click("//div[@class='head_nav_item fl_r']");
-            $this->wait(rand(3,5));
-            $this->click("Моя страница");
-            $this->wait(rand(3,5));
+            $this->goMyPage();
             $this->click("Друзья", "//div[@id='side_bar']");
             $this->wait(rand(3,5));
             $this->click("Заявки в друзья", "//div[@id='narrow_column']");
@@ -94,18 +89,10 @@ class AcceptanceTester extends \Codeception\Actor
     function addStatusVk() {
         try {
             // собираем афоризм
-            $this->amOnUrl("https://quote-citation.com/random");
-            $this->wait(rand(3,5));
-            $afor = $this->grabMultiple("//div[@class='quote-text']");
-            $afor = $afor[0];
+            $afor = $this->collectAphorism();
 
             // выкладываем в ВК
-            $this->amOnUrl("https://vk.com/");
-            $this->wait(rand(3,5));
-            $this->click("//div[@class='head_nav_item fl_r']");
-            $this->wait(rand(3,5));
-            $this->click("Моя страница");
-            $this->wait(rand(3,5));
+            $this->goMyPage();
             try{
                 $this->moveMouseOver("//div[@id='page_info_wrap']", 1, 1);
                 $this->wait(1);
@@ -135,24 +122,13 @@ class AcceptanceTester extends \Codeception\Actor
     function addNewsMyPageVk() {
         try {
             // собираем афоризм
-            $this->amOnUrl("https://quote-citation.com/random");
-            $this->wait(rand(3,5));
-            $afor = $this->grabMultiple("//div[@class='quote-text']");
-            $afor = $afor[0];
+            $afor = $this->collectAphorism();
 
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // выкладываем в ВК
-            $this->amOnUrl("https://vk.com/");
-            $this->wait(rand(3,5));
-            $this->click("//div[@class='head_nav_item fl_r']");
-            $this->wait(rand(3,5));
-            $this->click("Моя страница");
-            $this->wait(rand(3,5));
+            $this->goMyPage();
             $this->fillField("//div[@id='post_field']", $afor);
             $this->wait(rand(3,5));
             $random = rand(1, 8);
@@ -162,252 +138,48 @@ class AcceptanceTester extends \Codeception\Actor
                 echo "\nАфоризм добавлен в новости со своей страницы";
             }
             if ($random === 2) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с видео добавлен в новости со своей страницы";
             }
             if ($random === 3) {
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней добавлен в новости со своей страницы";
             }
             if ($random === 4) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photoRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото добавлен в новости со своей страницы";
             }
             if ($random === 5) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней и видео добавлен в новости со своей страницы";
             }
             if ($random === 6) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и видео добавлен в новости со своей страницы";
             }
             if ($random === 7) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и песней добавлен в новости со своей страницы";
             }
             if ($random === 8) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото, видео и песней добавлен в новости со своей страницы";
@@ -428,16 +200,10 @@ class AcceptanceTester extends \Codeception\Actor
     function addNewsPageNewsVk() {
         try {
             // собираем афоризм
-            $this->amOnUrl("https://quote-citation.com/random");
-            $this->wait(rand(3,5));
-            $afor = $this->grabMultiple("//div[@class='quote-text']");
-            $afor = $afor[0];
+            $afor = $this->collectAphorism();
 
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // выкладываем в ВК
             $this->amOnUrl("https://vk.com/feed");
@@ -451,252 +217,48 @@ class AcceptanceTester extends \Codeception\Actor
                 echo "\nАфоризм добавлен в новости";
             }
             if ($random === 2) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с видео добавлен в новости";
             }
             if ($random === 3) {
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней добавлен в новости";
             }
             if ($random === 4) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото добавлен в новости";
             }
             if ($random === 5) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с песней и видео добавлен в новости";
             }
             if ($random === 6) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и видео добавлен в новости";
             }
             if ($random === 7) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото и песней добавлен в новости";
             }
             if ($random === 8) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nАфоризм с фото, видео и песней добавлен в новости";
@@ -717,266 +279,54 @@ class AcceptanceTester extends \Codeception\Actor
     function addNewsMyPageVkNotWords() {
         try {
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // выкладываем в ВК
-            $this->amOnUrl("https://vk.com/");
-            $this->wait(rand(3,5));
-            $this->click("//div[@class='head_nav_item fl_r']");
-            $this->wait(rand(3,5));
-            $this->click("Моя страница");
-            $this->wait(rand(3,5));
+            $this->goMyPage();
             $random = rand(1, 7);
             if ($random === 1) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео добавлено в новости со своей страницы";
             }
             if ($random === 2) {
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня добавлена в новости со своей страницы";
             }
             if ($random === 3) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото добавлено в новости со своей страницы";
             }
             if ($random === 4) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео и песня добавлены в новости со своей страницы";
             }
             if ($random === 5) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео и фото добавлены в новости со своей страницы";
             }
             if ($random === 6) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня и фото добавлены в новости со своей страницы";
             }
             if ($random === 7) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня, видео и фото добавлены в новости со своей страницы";
@@ -997,262 +347,55 @@ class AcceptanceTester extends \Codeception\Actor
     function addNewsPageNewsVkNotWords() {
         try {
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // выкладываем в ВК
             $this->amOnUrl("https://vk.com/feed");
             $this->wait(rand(3,5));
             $random = rand(1, 7);
             if ($random === 1) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nВидео добавлено в новости";
             }
             if ($random === 2) {
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня добавлена в новости";
             }
             if ($random === 3) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photoRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото добавлено в новости";
             }
             if ($random === 4) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nПесня и видео добавлены в новости";
             }
             if ($random === 5) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото и видео добавлены в новости";
             }
             if ($random === 6) {
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото и песня добавлены в новости";
             }
             if ($random === 7) {
-                $this->click("//a[@class='ms_item ms_item_video _type_video']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='video_search_input']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $videoRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ui_box_search']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='photos_attach_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $photosRandom = rand(1, 5);
-                try{
-                    $this->click("//div[@class='photos_choose_rows']/a[$photosRandom]/div[@class='media_check_btn_wrap']/div");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
-                $this->click("Прикрепить");
-                $this->wait(rand(3,5));
-                $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
-                $this->wait(rand(3,5));
-                $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
-                $this->wait(rand(3,5));
-                $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
-                $this->wait(rand(3,5));
-                $audioRandom = rand(2, 6);
-                try{
-                    $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
-                    $this->wait(rand(3,5));
-                } catch (Exception $e){
-                    try{
-                        $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
-                        $this->wait(rand(3,5));
-                    } catch (Exception $e){}
-                };
+                $this->attachVideo($word);
+                $this->attachPhoto($word);
+                $this->attachAudio($word);
                 $this->click("Опубликовать");
                 $this->wait(rand(3,5));
                 echo "\nФото, видео и песня добавлены в новости";
@@ -1273,10 +416,7 @@ class AcceptanceTester extends \Codeception\Actor
     function addGroup() {
         try {
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3, 5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // выкладываем в ВК
             $this->amOnUrl("https://vk.com/");
@@ -1479,10 +619,7 @@ class AcceptanceTester extends \Codeception\Actor
     function addMusic() {
         try {
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // добавляем песню
             $this->amOnUrl("https://vk.com/");
@@ -1515,10 +652,7 @@ class AcceptanceTester extends \Codeception\Actor
     function addVideo() {
         try {
             // собираем слово
-            $this->amOnUrl("http://free-generator.ru/words.html");
-            $this->wait(rand(3,5));
-            $word = $this->grabMultiple("//div[@id='result']");
-            $word = $word[0];
+            $word = $this->collectWord();
 
             // добавляем видео
             $this->amOnUrl("https://vk.com/");
@@ -1543,5 +677,123 @@ class AcceptanceTester extends \Codeception\Actor
             file_put_contents('tests/log/log', $errorPlay . ",\n", FILE_APPEND);
         }
         $this->wait(rand(21, 59));
+    }
+
+    /**
+     * ---======= общие функции для многих действий =======---
+     */
+
+    /**
+     * собираем афоризм
+     */
+
+    function collectAphorism() {
+        $this->amOnUrl("https://quote-citation.com/random");
+        $this->wait(rand(3,5));
+        $afor = $this->grabMultiple("//div[@class='quote-text']");
+        $afor = $afor[0];
+
+        return $afor;
+    }
+
+    /**
+     * собираем слово
+     */
+
+    function collectWord() {
+        $this->amOnUrl("http://free-generator.ru/words.html");
+        $this->wait(rand(3,5));
+        $word = $this->grabMultiple("//div[@id='result']");
+        $word = $word[0];
+
+        return $word;
+    }
+
+    /**
+     * переходим на свою страницу
+     */
+
+    function goMyPage() {
+        $this->amOnUrl("https://vk.com/");
+        $this->wait(rand(3,5));
+        $this->click("//div[@class='head_nav_item fl_r']");
+        $this->wait(rand(3,5));
+        $this->click("Моя страница");
+        $this->wait(rand(3,5));
+    }
+
+    /**
+     * прикрепить видео
+     */
+
+    function attachVideo($word) {
+        $this->click("//a[@class='ms_item ms_item_video _type_video']");
+        $this->wait(rand(3,5));
+        $this->fillField("//input[@id='video_search_input']", $word);
+        $this->wait(rand(3,5));
+        $this->pressKey("//input[@id='video_search_input']", \Facebook\WebDriver\WebDriverKeys::ENTER);
+        $this->wait(rand(3,5));
+        $videoRandom = rand(1, 5);
+        try{
+            $this->click("//div[@id='video_search_global_videos_list']/div[$videoRandom]//div[@class='media_check_btn']");
+            $this->wait(rand(3,5));
+        } catch (Exception $e){
+            try{
+                $this->click("//div[@id='video_search_global_videos_list']/div[1]//div[@class='media_check_btn']");
+                $this->wait(rand(3,5));
+            } catch (Exception $e){}
+        };
+        $this->click("Прикрепить");
+        $this->wait(rand(3,5));
+    }
+
+    /**
+     * прикрепить аудио
+     */
+
+    function attachAudio($word) {
+        $this->click("//a[@class='ms_item ms_item_audio _type_audio']");
+        $this->wait(rand(3,5));
+        $this->fillField("//input[@id='ape_edit_playlist_search']", $word);
+        $this->wait(rand(3,5));
+        $this->pressKey("//input[@id='ape_edit_playlist_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
+        $this->wait(rand(3,5));
+        $audioRandom = rand(2, 6);
+        try{
+            $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[$audioRandom]/div[@class='ape_attach']");
+            $this->wait(rand(3,5));
+        } catch (Exception $e){
+            try{
+                $this->click("//div[@class='ape_item_list _ape_item_list noselect']/div[2]/div[@class='ape_attach']");
+                $this->wait(rand(3,5));
+            } catch (Exception $e){}
+        };
+    }
+
+    /**
+     * прикрепить фото
+     */
+
+    function attachPhoto($word) {
+        $this->click("//a[@class='ms_item ms_item_photo _type_photo']");
+        $this->wait(rand(3,5));
+        $this->click("//a[@class='ui_box_search']");
+        $this->wait(rand(3,5));
+        $this->fillField("//input[@id='photos_attach_search']", $word);
+        $this->wait(rand(3,5));
+        $this->pressKey("//input[@id='photos_attach_search']", \Facebook\WebDriver\WebDriverKeys::ENTER);
+        $this->wait(rand(3,5));
+        $photoRandom = rand(1, 5);
+        try{
+            $this->click("//div[@class='photos_choose_rows']/a[$photoRandom]/div[@class='media_check_btn_wrap']/div");
+            $this->wait(rand(3,5));
+        } catch (Exception $e){
+            try{
+                $this->click("//div[@class='photos_choose_rows']/a[1]/div[@class='media_check_btn_wrap']/div");
+                $this->wait(rand(3,5));
+            } catch (Exception $e){}
+        };
+        $this->click("Прикрепить");
+        $this->wait(rand(3,5));
     }
 }
